@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./consultorio.db"
+}
+
+model Pacient {
+  id            String   @id @default(uuid())
+  name          String
+  surname       String
+  dni           String   @unique
+  phone         String?
+  email         String?
+  birthDate     DateTime
+  address       String?
+  clinicalStory ClinicalStory?
+  turns         Turn[]
+  createdAt     DateTime @default(now())
+}
+
+model ClinicalStory {
+  id           String   @id @default(uuid())
+  pacientId    String   @unique
+  pacient      Pacient  @relation(fields: [pacientId], references: [id])
+  observations String?
+  treatments   Treatment[]
+  createdAt    DateTime @default(now())
+}
+
+model Turn {
+  id         String   @id @default(uuid())
+  pacientId  String
+  pacient    Pacient  @relation(fields: [pacientId], references: [id])
+  date       DateTime
+  state      String   
+  createdAt  DateTime @default(now())
+}
+
+model Treatment {
+  id               String        @id @default(uuid())
+  ClinicalStoryId  String
+  ClinicalStory    ClinicalStory @relation(fields: [ClinicalStoryId], references: [id])
+  description      String
+  date             DateTime      @default(now())
+  cost             Float
+  createdAt        DateTime @default(now())
+}
