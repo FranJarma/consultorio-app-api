@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTurnDto } from './dto/create-turn.dto';
 import { UpdateTurnDto } from './dto/update-turn.dto';
+import { Turn } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TurnsService {
-  create(createTurnDto: CreateTurnDto) {
-    return 'This action adds a new turn';
+  constructor(private prisma: PrismaService) {}
+
+  async getAll(): Promise<Turn[]> {
+    return this.prisma.turn.findMany();
   }
 
-  findAll() {
-    return `This action returns all turns`;
+  async getOne(id: string): Promise<Turn> {
+    return this.prisma.turn.findUnique({
+      where: { id },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} turn`;
+  async create(data: CreateTurnDto): Promise<Turn> {
+    return this.prisma.turn.create({
+      data,
+    });
   }
 
-  update(id: number, updateTurnDto: UpdateTurnDto) {
-    return `This action updates a #${id} turn`;
+  async update(id: string, data: UpdateTurnDto): Promise<Turn> {
+    return this.prisma.turn.update({
+      where: { id },
+      data,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} turn`;
+  async delete(id: string): Promise<void> {
+    await this.prisma.turn.delete({
+      where: { id },
+    });
   }
 }

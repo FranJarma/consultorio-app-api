@@ -1,50 +1,40 @@
 import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker'
+import { TurnStateEnum } from './../src/turns/types/turn'
+import { HealthEnsuranceEnum } from './../src/types/health-ensurance'
 
 const prisma = new PrismaClient()
 
 async function seed() {
-  // Create 1000 Pacients
-  for (let i = 0; i < 1000; i++) {
-    const pacient = await prisma.pacient.create({
+  for (let i = 0; i < 100; i++) {
+    const patient = await prisma.patient.create({
       data: {
-        name: faker.name.firstName(),
-        surname: faker.name.lastName(),
+        fullname: faker.person.fullName(),
         dni: faker.number.int({ min: 10000000, max: 99999999 }).toString(),
         phone: faker.phone.number(),
         email: faker.internet.email(),
-        birthDate: faker.date.past(),
-        address: faker.address.streetAddress(),
+        age: faker.number.int({ min: 5, max: 90 }),
+        address: faker.location.streetAddress(),
+        locality: faker.location.city(),
+        profession: faker.person.jobTitle(),
+        healthEnsurance: faker.helpers.arrayElement([HealthEnsuranceEnum.OSDE, HealthEnsuranceEnum.IOMA, HealthEnsuranceEnum.PAMI, HealthEnsuranceEnum.OSECAC, HealthEnsuranceEnum.SANCOR_SALUD]),
       },
     })
 
-    // Create a ClinicalStory for each Pacient
-    const clinicalStory = await prisma.clinicalStory.create({
+    await prisma.clinicalStory.create({
       data: {
-        pacientId: pacient.id,
+        patientId: patient.id,
         observations: faker.lorem.sentence(),
+        treatmentPlan: faker.lorem.sentence(),
       },
     })
 
-    // Create 3 Treatments for each ClinicalStory
-    for (let j = 0; j < 3; j++) {
-      await prisma.treatment.create({
-        data: {
-          ClinicalStoryId: clinicalStory.id,
-          description: faker.lorem.sentence(),
-          cost: parseFloat(faker.commerce.price()),
-          date: faker.date.past(),
-        },
-      })
-    }
-
-    // Create 3 Turns for each Pacient
     for (let j = 0; j < 3; j++) {
       await prisma.turn.create({
         data: {
-          pacientId: pacient.id,
+          patientId: patient.id,
           date: faker.date.future(),
-          state: 'Pending',
+          state: faker.helpers.arrayElement([TurnStateEnum.CANCELLED, TurnStateEnum.COMPLETED, TurnStateEnum.PENDING]),
           createdAt: new Date(),
         },
       })

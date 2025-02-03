@@ -7,44 +7,37 @@ datasource db {
   url      = "file:./consultorio.db"
 }
 
-model Pacient {
-  id            String   @id @default(uuid())
-  name          String
-  surname       String
-  dni           String   @unique
-  phone         String?
-  email         String?
-  birthDate     DateTime
-  address       String?
-  clinicalStory ClinicalStory?
-  turns         Turn[]
-  createdAt     DateTime @default(now())
+model Patient {
+  id             String   @id @default(uuid())
+  fullname       String
+  dni            String   @unique
+  healthEnsurance String
+  locality           String
+  profession     String
+  address        String?
+  phone          String?
+  email          String?
+  age            Int
+  createdAt      DateTime @default(now())
+
+  clinicalStories ClinicalStory[]
+  turns           Turn[]
 }
 
 model ClinicalStory {
   id           String   @id @default(uuid())
-  pacientId    String   @unique
-  pacient      Pacient  @relation(fields: [pacientId], references: [id])
-  observations String?
-  treatments   Treatment[]
+  patientId    String   
+  patient      Patient  @relation(fields: [patientId], references: [id])
   createdAt    DateTime @default(now())
+  observations String?
+  treatmentPlan String?
 }
 
 model Turn {
   id         String   @id @default(uuid())
-  pacientId  String
-  pacient    Pacient  @relation(fields: [pacientId], references: [id])
+  patientId  String
+  patient    Patient  @relation(fields: [patientId], references: [id])
   date       DateTime
   state      String   
   createdAt  DateTime @default(now())
-}
-
-model Treatment {
-  id               String        @id @default(uuid())
-  ClinicalStoryId  String
-  ClinicalStory    ClinicalStory @relation(fields: [ClinicalStoryId], references: [id])
-  description      String
-  date             DateTime      @default(now())
-  cost             Float
-  createdAt        DateTime @default(now())
 }
