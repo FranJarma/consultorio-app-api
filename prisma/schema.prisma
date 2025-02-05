@@ -19,7 +19,7 @@ model Patient {
   email          String?
   age            Int
   createdAt      DateTime @default(now())
-
+  state          String   @default("Registered")
   clinicalStories ClinicalStory[]
   turns           Turn[]
 }

@@ -5,6 +5,13 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    exposedHeaders: ['X-Total-Count']
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Consultorio App')
     .setDescription('Swagger for Consultorio App')

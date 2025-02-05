@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker'
-import { TurnStateEnum } from './../src/turns/types/turn'
 import { HealthEnsuranceEnum } from './../src/types/health-ensurance'
+import { PatientStateEnum } from './../src/patients/types/patient'
+import { TurnStateEnum } from './../src/turns/types/turn'
 
 const prisma = new PrismaClient()
 
@@ -18,16 +19,20 @@ async function seed() {
         locality: faker.location.city(),
         profession: faker.person.jobTitle(),
         healthEnsurance: faker.helpers.arrayElement([HealthEnsuranceEnum.OSDE, HealthEnsuranceEnum.IOMA, HealthEnsuranceEnum.PAMI, HealthEnsuranceEnum.OSECAC, HealthEnsuranceEnum.SANCOR_SALUD]),
+        state: faker.helpers.arrayElement([PatientStateEnum.DELETED, PatientStateEnum.REGISTERED])
       },
     })
 
-    await prisma.clinicalStory.create({
-      data: {
-        patientId: patient.id,
-        observations: faker.lorem.sentence(),
-        treatmentPlan: faker.lorem.sentence(),
-      },
-    })
+    for (let j = 0; j < 5; j++) {
+      await prisma.clinicalStory.create({
+        data: {
+          patientId: patient.id,
+          observations: faker.lorem.sentence(),
+          treatmentPlan: faker.lorem.sentence(),
+          createdAt: faker.date.soon()
+        },
+      })
+    }
 
     for (let j = 0; j < 3; j++) {
       await prisma.turn.create({

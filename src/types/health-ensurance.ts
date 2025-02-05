@@ -1,8 +1,8 @@
 export enum HealthEnsuranceEnum {
-    OSECAC = 'Osecac',
-    OSDE = 'Osde',
-    IOMA = 'Ioma',
-    PAMI = 'Pami',
+    OSECAC = 'OSECAC',
+    OSDE = 'OSDE',
+    IOMA = 'IOMA',
+    PAMI = 'PAMI',
     SANCOR_SALUD = 'Sancor Salud',
     SWISS_MEDICAL = 'Swiss Medical',
 }

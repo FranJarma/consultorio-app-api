@@ -1,4 +1,4 @@
-export const HEALTH_ENSURANCE = [
+export const HEALTH_ENSURANCES = [
     'IOMA',
     'OSDE',
     'OSECAC',
