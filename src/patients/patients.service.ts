@@ -11,7 +11,13 @@ export class PatientsService extends BaseService<Patient> {
   constructor(private prisma: PrismaService) {
     super(prisma.patient, patientFilters, {
       state: { not: PatientStateEnum.DELETED },
-    }, {});
+    }, {
+      turns: {
+        orderBy: {
+          date: 'asc',
+        },
+      },
+    });
   }
 
   async getOne(id: string): Promise<Patient> {

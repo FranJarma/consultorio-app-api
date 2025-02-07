@@ -3,13 +3,17 @@ import { CreateClinicalStoryDto } from './dto/create-clinical-story.dto';
 import { UpdateClinicalStoryDto } from './dto/update-clinical-story.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ClinicalStory } from '@prisma/client';
+import { BaseService } from 'src/common/services/base.service';
 
 @Injectable()
-export class ClinicalStoriesService {
-  constructor(private prisma: PrismaService) {}
-
-  async getAll(): Promise<ClinicalStory[]> {
-    return this.prisma.clinicalStory.findMany();
+export class ClinicalStoriesService extends BaseService<ClinicalStory>{
+  constructor(private prisma: PrismaService) {
+    super(
+      prisma.clinicalStory,
+      ['patient.fullname'],
+      {},
+      { patient: true }
+    );
   }
 
   async getOne(id: string): Promise<ClinicalStory> {
