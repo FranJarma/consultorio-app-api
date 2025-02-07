@@ -1,10 +1,11 @@
 export async function paginate<T>(
   prismaModel: { findMany: Function; count: Function },
+  include: object,
   filter: Record<string, any> = {},
   range: number[] = [0, 9],
   sort: [string, 'ASC' | 'DESC'] = ['id', 'ASC'],
   searchableFields: string[] = [],
-  defaultFilters: Record<string, any> = {}
+  defaultFilters: Record<string, any> = {},
 ) {
   const [start, end] = range;
   const take = end - start + 1;
@@ -31,6 +32,7 @@ export async function paginate<T>(
       take,
       where: prismaFilters,
       orderBy: { [sort[0]]: sort[1].toLowerCase() },
+      include,
     }),
     prismaModel.count({ where: prismaFilters }),
   ]);

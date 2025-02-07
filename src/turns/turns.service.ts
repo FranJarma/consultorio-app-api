@@ -3,24 +3,23 @@ import { CreateTurnDto } from './dto/create-turn.dto';
 import { UpdateTurnDto } from './dto/update-turn.dto';
 import { Turn } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { paginate } from 'src/common/utils/pagination.util';
+import { BaseService } from 'src/common/services/base.service';
 
 @Injectable()
-export class TurnsService {
-  constructor(private prisma: PrismaService) {}
+export class TurnsService extends BaseService<Turn> {
+  constructor(private prisma: PrismaService) {
+    super(
+      prisma.turn,
+      ['patient.fullname'],
+      {},
+      { patient: true }
+    );
+  }
 
   async getAll(filter?: string, range?: string, sort?: string) {
-    const parsedFilter = filter ? JSON.parse(filter) : {};
-    const parsedRange = range ? JSON.parse(range) : [0, 9];
-    const parsedSort = sort ? JSON.parse(sort) : ['id', 'ASC'];
-  
-    const result = await paginate(this.prisma.turn, parsedFilter, parsedRange, parsedSort);
-  
-    return {
-      data: result.data ?? [],
-      total: result.total ?? 0,
-    };
-  } 
+    const defaultSort = JSON.stringify([['date', 'ASC'], ['id', 'ASC']]);
+    return super.getAll(filter, range, sort ?? defaultSort);
+  }
 
   async getOne(id: string): Promise<Turn> {
     return this.prisma.turn.findUnique({
@@ -37,7 +36,10 @@ export class TurnsService {
   async update(id: string, data: UpdateTurnDto): Promise<Turn> {
     return this.prisma.turn.update({
       where: { id },
-      data,
+      data: {
+        date: data.date,
+        state: data.state
+      }
     });
   }
 

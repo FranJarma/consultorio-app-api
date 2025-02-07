@@ -11,7 +11,7 @@ export class PatientsService extends BaseService<Patient> {
   constructor(private prisma: PrismaService) {
     super(prisma.patient, patientFilters, {
       state: { not: PatientStateEnum.DELETED },
-    });
+    }, {});
   }
 
   async getOne(id: string): Promise<Patient> {
