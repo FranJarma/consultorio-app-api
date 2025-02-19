@@ -55,6 +55,7 @@ async function seed() {
           patientId: patient.id,
           observations: faker.lorem.sentence(),
           treatmentPlan: faker.lorem.sentence(),
+          odontogramUrl: faker.image.url(),
           createdAt: faker.date.soon()
         }
       })

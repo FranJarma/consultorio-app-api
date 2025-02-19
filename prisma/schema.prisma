@@ -29,8 +29,9 @@ model ClinicalStory {
   patientId    String   
   patient      Patient  @relation(fields: [patientId], references: [id])
   createdAt    DateTime @default(now())
-  observations String?
-  treatmentPlan String?
+  odontogramUrl String
+  observations String
+  treatmentPlan String
 }
 
 model Turn {

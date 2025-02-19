@@ -10,10 +10,14 @@ export class CreateClinicalStoryDto {
     @ApiProperty()
     @IsOptional()
     @IsString()
-    observations?: string;
+    observations: string;
+
+    @ApiProperty()
+    @IsOptional()
+    odontogramUrl: string;
 
     @ApiProperty()
     @IsOptional()
     @IsString()
-    treatmentPlan?: string;
+    treatmentPlan: string;
 }

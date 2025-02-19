@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
+import { Injectable, UsePipes } from '@nestjs/common';
 import { CreateClinicalStoryDto } from './dto/create-clinical-story.dto';
 import { UpdateClinicalStoryDto } from './dto/update-clinical-story.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ClinicalStory } from '@prisma/client';
 import { BaseService } from 'src/common/services/base.service';
+import { DniValidationPipe } from 'src/patients/pipes/DniValidationPipe';
 
 @Injectable()
 export class ClinicalStoriesService extends BaseService<ClinicalStory>{
@@ -22,12 +25,14 @@ export class ClinicalStoriesService extends BaseService<ClinicalStory>{
     });
   }
 
-  async create(data: CreateClinicalStoryDto): Promise<ClinicalStory> {
+  @UsePipes(DniValidationPipe)
+  async create(data: CreateClinicalStoryDto) {
     return this.prisma.clinicalStory.create({
-      data,
+      data
     });
   }
-
+  
+  @UsePipes(DniValidationPipe)
   async update(id: string, data: UpdateClinicalStoryDto): Promise<ClinicalStory> {
     return this.prisma.clinicalStory.update({
       where: { id },
