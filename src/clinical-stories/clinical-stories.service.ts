@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { Injectable, UsePipes } from '@nestjs/common';
 import { CreateClinicalStoryDto } from './dto/create-clinical-story.dto';
 import { UpdateClinicalStoryDto } from './dto/update-clinical-story.dto';

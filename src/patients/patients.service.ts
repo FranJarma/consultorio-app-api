@@ -12,6 +12,8 @@ export class PatientsService extends BaseService<Patient> {
     super(prisma.patient, patientFilters, {
       state: { not: PatientStateEnum.DELETED },
     }, {
+      healthEnsurance: true,
+      locality: true,
       turns: {
         orderBy: {
           date: 'asc',
@@ -24,6 +26,8 @@ export class PatientsService extends BaseService<Patient> {
     return this.prisma.patient.findUnique({
       where: { id },
       include: {
+        healthEnsurance: true,
+        locality: true,
         turns: {
           orderBy: {
             date: 'asc',

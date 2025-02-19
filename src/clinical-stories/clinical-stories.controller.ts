@@ -27,8 +27,6 @@ export class ClinicalStoriesController {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, callback) => {
-          console.log(req.body);
-          console.log({ file });
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const extension = extname(file.originalname);
           callback(null, `${file.fieldname}-${uniqueSuffix}${extension}`);

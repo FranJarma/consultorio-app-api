@@ -11,8 +11,6 @@ model Patient {
   id             String   @id @default(uuid())
   fullname       String
   dni            String   @unique
-  healthEnsurance String
-  locality           String
   profession     String
   address        String?
   phone          String?
@@ -22,6 +20,10 @@ model Patient {
   state          String   @default("Registered")
   clinicalStories ClinicalStory[]
   turns           Turn[]
+  healthEnsuranceId String
+  healthEnsurance HealthEnsurance @relation(fields: [healthEnsuranceId], references: [id])
+  localityId      String
+  locality        Locality @relation(fields: [localityId], references: [id])
 }
 
 model ClinicalStory {
@@ -49,4 +51,18 @@ model User {
   fullName String
   password String
   role     String
+}
+
+model HealthEnsurance {
+  id       String @id @default(uuid())
+  name     String 
+
+  Patients Patient[]
+}
+
+model Locality {
+  id       String @id @default(uuid())
+  name     String 
+
+  Patients Patient[]
 }

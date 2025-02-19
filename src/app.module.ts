@@ -7,10 +7,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ClinicalStoriesModule } from './clinical-stories/clinical-stories.module';
 import { TotalCountMiddleware } from './common/middleware/total-count.middleware';
 import { AuthModule } from './auth/auth.module';
-import { FileUploadModule } from './file-upload/file-upload.module';
+import { LocalitiesModule } from './localities/localities.module';
+import { HealthEnsurancesModule } from './health-ensurances/health-ensurances.module';
 
 @Module({
-  imports: [PatientsModule, TurnsModule, PrismaModule, ClinicalStoriesModule, AuthModule, FileUploadModule],
+  imports: [PatientsModule, TurnsModule, PrismaModule, ClinicalStoriesModule, AuthModule, LocalitiesModule, HealthEnsurancesModule],
   controllers: [AppController],
   providers: [AppService],
 })

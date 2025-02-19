@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsEmail, IsInt } from 'class-validator';
-import { HealthEnsuranceEnum } from 'src/types/health-ensurance';
-import { LocalitiesEnum } from 'src/types/localities';
 
 export class CreatePatientDto {
   @ApiProperty()
@@ -11,14 +9,6 @@ export class CreatePatientDto {
   @ApiProperty()
   @IsString()
   dni: string;
-
-  @ApiProperty()
-  @IsString()
-  healthEnsurance: HealthEnsuranceEnum;
-
-  @ApiProperty()
-  @IsString()
-  locality: LocalitiesEnum;
 
   @ApiProperty()
   @IsString()
@@ -42,4 +32,12 @@ export class CreatePatientDto {
   @ApiProperty()
   @IsInt()
   age: number;
+
+  @ApiProperty()
+  @IsString()
+  healthEnsuranceId: string;
+
+  @ApiProperty()
+  @IsString()
+  localityId: string;
 }
