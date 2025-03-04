@@ -10,7 +10,7 @@ export class LocalitiesService extends BaseService<Locality> {
   constructor(private prisma: PrismaService) {
     super(
       prisma.locality,
-      [],
+      ["name"],
       {},
       {}
     );

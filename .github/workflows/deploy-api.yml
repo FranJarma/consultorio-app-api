@@ -1,0 +1,39 @@
+name: Deploy api to VPS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚀 Clone repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Configure SSH Connection
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 📂 Copy files to server (excluding .env)
+        run: |
+          rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh -o StrictHostKeyChecking=no" ./ root@${{ secrets.SERVER_IP }}:/root/consultorio-app-api
+
+      - name: 🚀 Install dependencies & Build backend
+        run: |
+          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /root/consultorio-app-api
+          pnpm install --frozen-lockfile
+          pnpm run build
+          EOF
+
+      - name: 🔄 Restart Backend with PM2
+        run: |
+          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+          pm2 restart api-consultorio || pm2 start dist/src/main.js --name api-consultorio
+          pm2 save
+          exit
+          EOF

@@ -10,7 +10,7 @@ export class HealthEnsurancesService extends BaseService<HealthEnsurance> {
   constructor(private prisma: PrismaService) {
     super(
       prisma.healthEnsurance,
-      [],
+      ["name"],
       {},
       {}
     );
